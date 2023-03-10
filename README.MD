@@ -13,5 +13,5 @@ This is a beginner intro to macros in rust. Its very easy to follow and understa
 Run ```cargo new``` to create a cargo package and you are good to go.
 
 ## Youtube video series
-- Rust macro is Easy - Part 1 [![Rust macro is Easy - Part 1 https://youtu.be/N-_CMAXQ5hc](/src/asset/images/Rust%20macro%20is%20so%20easy.png)]( https://youtu.be/N-_CMAXQ5hc)
+- Rust macro is Easy - Part 1 -  https://youtu.be/N-_CMAXQ5hc [![Rust macro is Easy - Part 1 https://youtu.be/N-_CMAXQ5hc](/src/asset/images/Rust%20macro%20is%20so%20easy.png)]( https://youtu.be/N-_CMAXQ5hc)
 
