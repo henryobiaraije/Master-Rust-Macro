@@ -14,9 +14,23 @@ fn main() {
     sizes6.push(4);
     sizes6.push(5);
 
+    let sum = my_sum!(1.0, 2.0, 3.0, 4.0, 5.0);
+
+    println!("sum = {}", sum);
 }
 
-
+#[macro_export]
+macro_rules! my_sum {
+    ($($a:expr),*) => {
+       {
+        let mut sum = 0.0;
+        $(
+            sum += $a;
+        )*
+        sum
+       }
+    };
+}
 
 #[macro_export]
 macro_rules! my_vec  {
