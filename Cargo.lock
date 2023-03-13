@@ -3,5 +3,9 @@
 version = 3
 
 [[package]]
+name = "macro-examples-part-2"
+version = "0.1.0"
+
+[[package]]
 name = "rust-basics-features"
 version = "0.1.0"

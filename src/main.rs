@@ -1,46 +1,38 @@
 fn main() {
-    let sizes = Vec::from([1, 2, 3, 4, 5]);
-    let sizes2 = [1, 2, 3, 4, 5].to_vec();
-    let sizes3 = vec![1, 2, 3, 4, 5];
-
-    let sizes4 = my_vec!(1, 2, 3, 4, 5);
-    let sizes42 = my_vec!(1.0, 2.0, 3.0, 4.0, 5.0);
-    let sizes5: Vec<i32> = my_vec!();
-
-    let mut sizes6 = Vec::new();
-    sizes6.push(1);
-    sizes6.push(2);
-    sizes6.push(3);
-    sizes6.push(4);
-    sizes6.push(5);
-
-    let sum = my_sum!(1.0, 2.0, 3.0, 4.0, 5.0);
-
-    println!("sum = {}", sum);
+    let sum = add(&[1, 2, 3, 4]);
+    let diff = diff(&[1, 2, 3, 4]);
+    let product = mult(&[4, 2]);
+    println!("sum = {}, diff = {}, product = {}", sum, diff, product);
 }
 
-#[macro_export]
-macro_rules! my_sum {
-    ($($a:expr),*) => {
-       {
-        let mut sum = 0.0;
-        $(
-            sum += $a;
-        )*
-        sum
-       }
-    };
-}
+// Generate a function call add using out custom macro.
+special_fn!(add, +, 4, i32, 0);
 
-#[macro_export]
-macro_rules! my_vec  {
-    ($($x:expr),*) => {
-        {
-            let mut new_vec = Vec::new();
-            $(
-                new_vec.push($x);
-            )*
-            new_vec
+// Generate a function call diff using out custom macro.
+special_fn!(diff, -, 4, i32, 0);
+
+// Generate a function call mult using out custom macro.
+special_fn!(mult, *, 2, i32, 0);
+
+
+// Definging out macro.
+#[macro_export] // This makes our macro importable into other modules.
+macro_rules! special_fn {
+
+    // Define the patterns.
+    ($name:ident, $op:tt, $n:literal, $t:ty, $default:expr ) => {
+        fn $name(values: &[$t; $n]) -> $t {
+
+            // Define the generated code here.
+            if(values.len() < 1){
+                return $default;
+            }
+            let mut result = values[0];
+            for i in 1..$n {
+                result = result $op values[i];
+                println!("i = {}, result = {}, val = {}",i,result,values[i]);
+            }
+            result
         }
-    }
+    };
 }
