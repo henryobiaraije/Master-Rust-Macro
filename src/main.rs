@@ -1,38 +1,62 @@
+use paste::paste;
 fn main() {
-    let sum = add(&[1, 2, 3, 4]);
-    let diff = diff(&[1, 2, 3, 4]);
-    let product = mult(&[4, 2]);
-    println!("sum = {}, diff = {}, product = {}", sum, diff, product);
+    let mut product1 = Product {
+        id: 425,
+        title: String::from("Product 1"),
+        sku: String::from("JIFEJ2"),
+        url: String::from("https://example-product.com"),
+    };
+
+    println!("url = {}", product1.url());
+
+    product1.set_url(String::from("https://changed.com"));
+
+    println!("url after = {}", product1.url());
 }
 
-// Generate a function call add using out custom macro.
-special_fn!(add, +, 4, i32, 0);
+create_struct!(Product {
+    id: u32,
+    title: String,
+    sku: String,
+    url: String,
+});
 
-// Generate a function call diff using out custom macro.
-special_fn!(diff, -, 4, i32, 0);
+create_struct!(User {
+    id: u32,
+    name: String
+});
 
-// Generate a function call mult using out custom macro.
-special_fn!(mult, *, 2, i32, 0);
+#[macro_export]
+macro_rules! create_struct  {
+    ($struct_name:ident {$($field_name:ident : $field_type : ty),* $(,)*}  ) => {
 
 
-// Definging out macro.
-#[macro_export] // This makes our macro importable into other modules.
-macro_rules! special_fn {
-
-    // Define the patterns.
-    ($name:ident, $op:tt, $n:literal, $t:ty, $default:expr ) => {
-        fn $name(values: &[$t; $n]) -> $t {
-
-            // Define the generated code here.
-            if(values.len() < 1){
-                return $default;
-            }
-            let mut result = values[0];
-            for i in 1..$n {
-                result = result $op values[i];
-                println!("i = {}, result = {}, val = {}",i,result,values[i]);
-            }
-            result
+        #[derive(Debug)]
+        struct $struct_name {
+                $($field_name : $field_type),*
         }
+
+        paste!{
+            impl $struct_name{
+                fn new($($field_name:$field_type),*)  -> Self{
+                    Self{
+                        $($field_name),*
+                    }
+                }
+
+                $(
+                    fn $field_name(&self) -> &$field_type{
+                        &self.$field_name
+                    }
+                )*
+
+                $(
+                    fn [<set_ $field_name>](&mut self,$field_name:$field_type) {
+                        self.$field_name = $field_name
+                    }
+                )*
+            }
+        }
+
     };
 }
